@@ -72,10 +72,10 @@ func (p *program) run() (int, bool) {
 		terminate := p.step(p.ip)
 
 		if terminate {
-			return p.acc, true
+			return p.acc, terminate
 		}
 		if _, v := visited[p.ip]; v {
-			return p.acc, false
+			return p.acc, terminate
 		}
 
 		visited[p.ip] = true
