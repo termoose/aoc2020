@@ -38,7 +38,7 @@ func find(adaptors []int, start, r int) int {
 }
 
 func count(adaptors []int) int {
-	c := make(map[int]int)
+	c := make(map[int]int, len(adaptors))
 	c[0] = 1
 
 	for _, a := range adaptors {
