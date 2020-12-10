@@ -38,7 +38,7 @@ func find(adaptors []int, start, r int) int {
 }
 
 func count(adaptors []int) int {
-	c := make(map[int]int, len(adaptors))
+	c := make(map[int]int, len(adaptors)+3)
 	c[0] = 1
 
 	for _, a := range adaptors {
@@ -48,11 +48,26 @@ func count(adaptors []int) int {
 	return c[adaptors[len(adaptors)-1]]
 }
 
+func fastCount(a map[int]int, latest int) int {
+	a[0] = 1
+
+	for key, _ := range a {
+		a[key] += a[key-1] + a[key-2] + a[key-3]
+	}
+
+	return a[latest]
+}
+
 func main() {
 	d := readLines("input.txt")
+	dataMap := make(map[int]int)
 	sort.Ints(d)
+	for _, d := range d {
+		dataMap[d] = 0
+	}
+
 	resultA := find(d, 0, 3)
-	resultB := count(d)
+	resultB := fastCount(dataMap, d[len(d)-1])
 	fmt.Printf("result A: %d\n", resultA)
 	fmt.Printf("result B: %d\n", resultB)
 }
