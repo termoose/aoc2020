@@ -6,21 +6,26 @@ import (
 	"testing"
 )
 
-func BenchmarkDay9(b *testing.B) {
-	data := readLines("input.txt")
-	sort.Ints(data)
+func BenchmarkDay10(b *testing.B) {
+	var data []int
+	b.Run("Init and sort", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			data = readLines("input.txt")
+			sort.Ints(data)
+		}
+	})
+
 	resultA := 0
 	resultB := 0
 	b.Run("Part1", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			_, diffa, diffb := find(data, 0, 3)
-			resultA = diffa * diffb
+			resultA = find(data, 0, 3)
 		}
 	})
 
 	b.Run("Part2", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			resultB = count(data, 3)
+			resultB = count(data)
 		}
 	})
 
