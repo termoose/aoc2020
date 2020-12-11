@@ -183,15 +183,21 @@ func main() {
 	prev := toBytes(d)
 
 	for {
-		next := mutate2(prev)
-		//print(next)
-		//fmt.Printf("-----\n")
+		next := mutate(prev)
 		if equal(next, prev) {
-			fmt.Printf("equals! occupied: %d\n", countOccupied(next))
+			fmt.Printf("Part A occupied: %d\n", countOccupied(next))
 			break
 		}
 		prev = next
 	}
 
-	//fmt.Printf("%v\n", d)
+	prev = toBytes(d)
+	for {
+		next := mutate2(prev)
+		if equal(next, prev) {
+			fmt.Printf("Part B occupied: %d\n", countOccupied(next))
+			break
+		}
+		prev = next
+	}
 }
