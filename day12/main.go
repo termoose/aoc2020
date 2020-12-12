@@ -186,5 +186,5 @@ func main() {
 	}
 
 	fmt.Printf("manhattan A: %d\n", abs(s1.x)+abs(s1.y))
-	fmt.Printf("manhattan A: %d\n", abs(s2.x)+abs(s2.y))
+	fmt.Printf("manhattan B: %d\n", abs(s2.x)+abs(s2.y))
 }
