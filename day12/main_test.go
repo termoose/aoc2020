@@ -6,9 +6,17 @@ import (
 )
 
 func BenchmarkDay12(b *testing.B) {
-	data := readLines("input.txt")
+	var instructions []instruction
 	resultA := 0
 	resultB := 0
+
+	b.Run("Parse", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			data := readLines("input.txt")
+			instructions = parse(data)
+		}
+	})
+
 	b.Run("PartA", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			s := ship{
@@ -18,8 +26,8 @@ func BenchmarkDay12(b *testing.B) {
 				wx:        10,
 				wy:        1,
 			}
-			for _, l := range data {
-				s.step(l)
+			for _, i := range instructions {
+				s.step(i)
 			}
 			resultA = abs(s.x) + abs(s.y)
 		}
@@ -34,8 +42,8 @@ func BenchmarkDay12(b *testing.B) {
 				wx:        10,
 				wy:        1,
 			}
-			for _, l := range data {
-				s.stepw(l)
+			for _, i := range instructions {
+				s.stepw(i)
 			}
 			resultB = abs(s.x) + abs(s.y)
 		}

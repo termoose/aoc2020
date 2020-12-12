@@ -30,6 +30,11 @@ type ship struct {
 	wy        int
 }
 
+type instruction struct {
+	action   byte
+	argument int
+}
+
 func (s *ship) forward(n int) {
 	switch s.direction {
 	case 'N':
@@ -104,53 +109,47 @@ func sincos(angle int) (int, int) {
 
 func (s *ship) rot(angle int) {
 	sin, cos := sincos(angle)
-	newx := s.wx * cos - s.wy * sin
-	newy := s.wx * sin + s.wy * cos
+	newx := s.wx*cos - s.wy*sin
+	newy := s.wx*sin + s.wy*cos
 	s.wx = newx
 	s.wy = newy
 }
 
-func (s *ship) step(action string) {
-	f := action[0]
-	arg, _ := strconv.Atoi(action[1:])
-
-	switch f {
+func (s *ship) step(inst instruction) {
+	switch inst.action {
 	case 'N':
-		s.y += arg
+		s.y += inst.argument
 	case 'S':
-		s.y -= arg
+		s.y -= inst.argument
 	case 'E':
-		s.x += arg
+		s.x += inst.argument
 	case 'W':
-		s.x -= arg
+		s.x -= inst.argument
 	case 'L':
-		s.rotate(f, arg)
+		s.rotate(inst.action, inst.argument)
 	case 'R':
-		s.rotate(f, arg)
+		s.rotate(inst.action, inst.argument)
 	case 'F':
-		s.forward(arg)
+		s.forward(inst.argument)
 	}
 }
 
-func (s *ship) stepw(action string) {
-	f := action[0]
-	arg, _ := strconv.Atoi(action[1:])
-
-	switch f {
+func (s *ship) stepw(inst instruction) {
+	switch inst.action {
 	case 'N':
-		s.wy += arg
+		s.wy += inst.argument
 	case 'S':
-		s.wy -= arg
+		s.wy -= inst.argument
 	case 'E':
-		s.wx += arg
+		s.wx += inst.argument
 	case 'W':
-		s.wx -= arg
+		s.wx -= inst.argument
 	case 'L':
-		s.rot(arg)
+		s.rot(inst.argument)
 	case 'R':
-		s.rot(360-arg)
+		s.rot(360 - inst.argument)
 	case 'F':
-		s.forwardw(arg)
+		s.forwardw(inst.argument)
 	}
 }
 
@@ -161,8 +160,25 @@ func abs(i int) int {
 	return i
 }
 
+func parse(lines []string) []instruction {
+	var result []instruction
+
+	for _, l := range lines {
+		f := l[0]
+		arg, _ := strconv.Atoi(l[1:])
+		result = append(result, instruction{
+			action:   f,
+			argument: arg,
+		})
+	}
+
+	return result
+}
+
 func main() {
 	d := readLines("input.txt")
+	instructions := parse(d)
+
 	s1 := ship{
 		x:         0,
 		y:         0,
@@ -170,8 +186,8 @@ func main() {
 		wx:        10,
 		wy:        1,
 	}
-	for _, l := range d {
-		s1.step(l)
+	for _, i := range instructions {
+		s1.step(i)
 	}
 
 	s2 := ship{
@@ -181,8 +197,8 @@ func main() {
 		wx:        10,
 		wy:        1,
 	}
-	for _, l := range d {
-		s2.stepw(l)
+	for _, i := range instructions {
+		s2.stepw(i)
 	}
 
 	fmt.Printf("manhattan A: %d\n", abs(s1.x)+abs(s1.y))
