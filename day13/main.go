@@ -49,14 +49,8 @@ func parse(d []string) travel {
 	}
 }
 
-func wait(earliest, busId int) int {
-	time := 0
-	for {
-		if time >= earliest {
-			return time - earliest
-		}
-		time += busId
-	}
+func waitFast(earliest, busId int) int {
+	return busId - (earliest % busId)
 }
 
 func earliest(t travel) int {
@@ -67,7 +61,7 @@ func earliest(t travel) int {
 		if b == 0 {
 			continue
 		}
-		w := wait(t.earliest, b)
+		w := waitFast(t.earliest, b)
 		if w < smallest {
 			smallest = w
 			busId = b
@@ -78,9 +72,9 @@ func earliest(t travel) int {
 }
 
 func inv(elem, ring int) int {
-	//fmt.Printf("inverse %d MOV %d\n", elem, ring)
 	r := big.NewInt(int64(ring))
 	e := big.NewInt(int64(elem))
+
 	return int(r.ModInverse(e, r).Int64())
 }
 
@@ -103,8 +97,6 @@ func chinese(t travel) int {
 		ys = append(ys, y)
 		zs = append(zs, z)
 	}
-	//fmt.Printf("ys: %v\n", ys)
-	//fmt.Printf("zs: %v\n", zs)
 
 	result := 0
 	count := 0
@@ -124,27 +116,11 @@ func chinese(t travel) int {
 
 func main() {
 	d := readLines("input.txt")
-
 	p := parse(d)
-	res := earliest(p)
-	fmt.Printf("result: %d\n", res)
-	fmt.Printf("%v\n", p)
 
-	//step := 0
-	//for {
-	//	res := p.cong(step)
-	//	if res {
-	//		fmt.Printf("step: %d\n", step)
-	//		break
-	//	}
-	//	step += 1
-	//}
+	res := earliest(p)
+	fmt.Printf("resultA: %d\n", res)
 
 	c := chinese(p)
-	fmt.Printf("chinese: %d\n", c+1)
-
-	// 19 % 8 == 7
-	// 31 % 8 == 6
-	// ...
-
+	fmt.Printf("resultB: %d\n", c+1)
 }
