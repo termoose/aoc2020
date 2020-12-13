@@ -67,99 +67,18 @@ func earliest(t travel) int {
 		if b == 0 {
 			continue
 		}
-		fmt.Printf("mod: %d MOD %d = %d\n", t.earliest, b, t.earliest % b)
-		//mod := t.earliest % b
 		w := wait(t.earliest, b)
 		if w < smallest {
 			smallest = w
 			busId = b
 		}
-		fmt.Printf("res: %d\n", wait(t.earliest, b))
 	}
 
 	return smallest * busId
 }
 
-func GCD(a, b int) int {
-	for b != 0 {
-		t := b
-		b = a % b
-		a = t
-	}
-	return a
-}
-
-func LCM(a, b int, integers ...int) int {
-	result := a * b / GCD(a, b)
-
-	for i := 0; i < len(integers); i++ {
-		result = LCM(result, integers[i])
-	}
-
-	return result
-}
-
-// LCM???
-func (t travel) cong(step int) bool {
-	for i, n := range t.buses {
-		if n == 0 {
-			continue
-		}
-		// step + i == 0 (mod n)
-		// step == (n-1)*i (mod n)
-		// step == ni-i (mod n)
-		//c := (step + i) % n
-
-		// step == n-i-1 (mod n)
-		c := step % n
-		// pos % n == 0
-		//c := (n + step) % l
-		//if c != i {
-		//	return false
-		//}
-		if c != (n-i-1) {
-			return false
-		}
-	}
-
-	for i, n := range t.buses {
-		if n == 0 {
-			continue
-		}
-		//c := step % n
-		fmt.Printf("%d == %d (mod %d)\n", step, n-i-1, n)
-		//fmt.Printf("%d MOD %d == %d\n", step, n-i-1, c)
-	}
-
-	return true
-}
-
-func GCDRecursive(p, q int) int {
-	if q == 0 {
-		return p
-	}
-
-	r := p % q
-	return GCDRecursive(q, r)
-}
-
-//def egcd(a, b):
-//if a == 0:
-//return (b, 0, 1)
-//else:
-//gcd, x, y = egcd(b % a, a)
-//return (gcd, y - (b//a) * x, x)
-func egcd(a, b int) (int, int, int) {
-	if a == 0 {
-		return b, 0, 1
-	}
-
-	gcd, x, y := egcd(b % a, a)
-	return gcd, y - (b/a)*x, x
-}
-
 func inv(elem, ring int) int {
-	fmt.Printf("inverse %d MOV %d\n", elem, ring)
+	//fmt.Printf("inverse %d MOV %d\n", elem, ring)
 	r := big.NewInt(int64(ring))
 	e := big.NewInt(int64(elem))
 	return int(r.ModInverse(e, r).Int64())
@@ -184,8 +103,9 @@ func chinese(t travel) int {
 		ys = append(ys, y)
 		zs = append(zs, z)
 	}
-	fmt.Printf("ys: %v\n", ys)
-	fmt.Printf("zs: %v\n", zs)
+	//fmt.Printf("ys: %v\n", ys)
+	//fmt.Printf("zs: %v\n", zs)
+
 	result := 0
 	count := 0
 	for i, n := range t.buses {
@@ -195,7 +115,7 @@ func chinese(t travel) int {
 		a := n-i-1
 		y := ys[count]
 		z := zs[count]
-		fmt.Printf("%d * %d * %d\n", a, y, z)
+		//fmt.Printf("%d * %d * %d\n", a, y, z)
 		result += a * y * z
 		count++
 	}
